@@ -57,8 +57,8 @@ document.addEventListener('mousemove', (event) => {
     };
 
     // Rotate the cube based on mouse movement
-    cube.rotation.x += deltaMove.y * 0.01;
-    cube.rotation.y += deltaMove.x * 0.01;
+    cube.rotation.x += deltaMove.y * 0.005;
+    cube.rotation.y += deltaMove.x * 0.005;
 
     previousMousePosition = {
       x: event.clientX,
