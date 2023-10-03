@@ -10,19 +10,17 @@ const camera = new THREE.PerspectiveCamera(
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0xffffff); // Set the background color to white (0xffffff)
+renderer.setClearColor(0xffffff); 
 document.body.appendChild(renderer.domElement);
 
 const originalCubeSize = 1;
-const cubeSize = originalCubeSize * 2; // Make the cube 2 times bigger
+const cubeSize = originalCubeSize * 2; 
 
-// Create the main cube with purple material
 const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 const mainMaterial = new THREE.MeshBasicMaterial({ color: 0x800080 });
 const cube = new THREE.Mesh(geometry, mainMaterial);
 scene.add(cube);
 
-// Create an outline for the cube using EdgesGeometry and LineBasicMaterial
 const edges = new THREE.EdgesGeometry(geometry);
 const outlineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 });
 const outline = new THREE.LineSegments(edges, outlineMaterial);
@@ -36,7 +34,6 @@ let previousMousePosition = {
   y: 0
 };
 
-// Add event listeners for mouse interactions
 document.addEventListener('mousedown', (event) => {
   isDragging = true;
   previousMousePosition = {
@@ -56,7 +53,6 @@ document.addEventListener('mousemove', (event) => {
       y: event.clientY - previousMousePosition.y
     };
 
-    // Rotate the cube based on mouse movement
     cube.rotation.x += deltaMove.y * 0.005;
     cube.rotation.y += deltaMove.x * 0.005;
 
@@ -69,6 +65,10 @@ document.addEventListener('mousemove', (event) => {
 
 function animate() {
   requestAnimationFrame(animate);
+
+  cube.rotation.x += 0.005;
+  cube.rotation.y += 0.005;
+
   renderer.render(scene, camera);
 }
 
