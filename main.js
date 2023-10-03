@@ -1,60 +1,43 @@
-import { arraySlice } from 'three/src/animation/AnimationUtils';
-import './style.css'
-
-import * as THREE from 'three';
+import * as THREE from "three";
 
 const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
-const camera = new THREE.PerspectiveCamera( 75, window. innerWidth / window.innerHeight, 0.1, 1000 );
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0xffffff); // Set the background color to white (0xffffff)
+document.body.appendChild(renderer.domElement);
 
-const renderer = new THREE.WebGLRenderer({ 
-  canvas: document.querySelector('#bg'),
-})
+const originalCubeSize = 1;
+const cubeSize = originalCubeSize * 2; // Make the cube 2 times bigger
 
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
-camera.position.setZ(30);
+// Create the main cube with purple material
+const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+const mainMaterial = new THREE.MeshBasicMaterial({ color: 0x800080 });
+const cube = new THREE.Mesh(geometry, mainMaterial);
+scene.add(cube);
 
-renderer.render( scene, camera );
+// Create an outline for the cube using EdgesGeometry and LineBasicMaterial
+const edges = new THREE.EdgesGeometry(geometry);
+const outlineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 });
+const outline = new THREE.LineSegments(edges, outlineMaterial);
+cube.add(outline);
 
-const geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
-const material = new THREE.MeshStandardMaterial({ color: 0xFF6347});
-const torus = new THREE.Mesh( geometry, material );
+camera.position.z = 5;
 
-scene.add(torus);
+function animate() {
+  requestAnimationFrame(animate);
 
-const pointLight = new THREE.PointLight(0xffff00); // Yellowish color
-pointLight.position.set(5, 5, 5);
-scene.add(pointLight);
+  // Rotate the main cube
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
-
-const ambientLight = new THREE.AmbientLight(0xffffff)
-scene.add(pointLight, ambientLight)
-
-scene.add(pointLight)
-
-function addStar() {
-  const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-  const stars = new THREE.Mesh(geometry, material);
-
-  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
-
-  stars.position.set(x, y, z); // Use `set` to set the position
-  scene.add(stars);
+  renderer.render(scene, camera);
 }
-
-Array(200).fill().forEach(addStar);
-
-
-function animate(){
-  requestAnimationFrame( animate );
-
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
-
-  renderer.render( scene, camera );
-}
-
 animate();
+
